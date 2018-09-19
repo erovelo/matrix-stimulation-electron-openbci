@@ -1,0 +1,28 @@
+body{
+    /*background-color: #1E1E1E;
+    */
+}
+
+.table {
+    max-width: 860px;
+    width: 90%; 
+    height: 100%;
+    margin: 5% auto; 
+}
+
+.row {
+    float: left; 
+    width:30%; 
+    width: calc(30% - 15px);
+    border: 15px solid #1E1E1E;
+    padding-bottom: 30%; 
+    margin: 5px;
+    background-color:  aliceblue;
+    background-image: url('../img/img.jpg');
+    background-position: center;
+    background-size: 100%;
+}
+
+.table .selected{
+    border-color: green;
+}

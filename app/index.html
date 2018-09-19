@@ -1,0 +1,99 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Object Detection :D</title>
+    <!-- Estilos-->
+    <link rel="stylesheet" href="assets/css/table.css">
+
+    <!-- Insert this line above script imports  -->
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+    <script src="lib/jquery-3.3.1.min.js"></script>
+    <script src="lib/Chart.min.js"></script>
+    <script src="jquery-plugins/matrix-stimulation.js"></script>
+    <!-- Insert this line after script imports -->
+    <script>if (window.module) module = window.module;</script>
+</head>
+
+<body style="margin: 0">
+    <div id="matrix"></div>
+    <div style="margin: 0 auto;">
+        <input type="submit" value="Start" onclick="start()">
+        <input type="submit" value="Finish" onclick="stop()">
+        <canvas id="myChart" width="400px" height="100px"></canvas>
+    </div>
+</body>
+
+</html>
+
+<script>
+    function start(){
+        ourboard.streamStart();
+        $("#matrix").matrixStimulation("start");
+        
+    }
+
+    function stop (){
+        ourboard.streamStop();
+        $("#matrix").matrixStimulation("stop");
+
+    }
+
+    function addData(chart, label, data) {
+        chart.data.labels.push(label);
+        chart.data.datasets.forEach((dataset) => {
+            dataset.data.push(data);
+        });
+        chart.update();
+    }
+
+    function removeData(chart) {
+        chart.data.labels.pop();
+        chart.data.datasets.forEach((dataset) => {
+            dataset.data.pop();
+        });
+        chart.update();
+    }
+
+
+    // Graficas
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [0,23],
+            datasets: [{data: 0, label: '0',}],
+        },
+        options: {
+            title: {
+            display: true,
+            text: 'World population per region (in millions)'
+            }
+        }
+        //options: {},
+    });
+
+    // Configuraciones de Cyton
+    const Cyton = require('openbci-cyton');
+    const ourboard = new Cyton({
+        simulate: true, // Datos sinteticos
+    });
+
+    // Se conecta al dispositivo o simulador
+    ourboard.connect("OpenBCISimulator")
+        .then(() => {
+            //ourboard.streamStart();
+            ourboard.on('sample', sample => {
+                //for (let i = 0; i < ourboard.numberOfChannels(); i++) {
+                    //removeData(myChart);
+                    addData(myChart, 'Volts', [sample.channelData[0].toFixed(8)]);
+                    //console.log("Channel " + (i + 1) + ": " + sample.channelData[i].toFixed(8) + " Volts.");
+                //}
+            });
+        })
+
+    // Matriz de estimulacion
+    $(document).ready(function () {
+        $("#matrix").matrixStimulation();
+    });
+</script>
