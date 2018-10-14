@@ -16,11 +16,13 @@
 </head>
 
 <body style="margin: 0">
+    <!--
+    <input type="submit" value="Start" onclick="start()">
+    <input type="submit" value="Finish" onclick="stop()">
+    -->
     <div id="matrix"></div>
     <div style="margin: 0 auto;">
-        <input type="submit" value="Start" onclick="start()">
-        <input type="submit" value="Finish" onclick="stop()">
-        <canvas id="myChart" width="400px" height="100px"></canvas>
+        <canvas id="myChart" width="400px" height="100px" style="display:none;"></canvas>
     </div>
 </body>
 
@@ -28,13 +30,25 @@
 
 <script>
     function start(){
-        ourboard.streamStart();
-        $("#matrix").matrixStimulation("start");
+        //ourboard.streamStart();
+        $("#matrix").matrixStimulation("start", ()=>{
+            console.log('Estimulacion terminada');
+
+            //Filtrado y clasificado va aqui
+
+            //Dice objeto seleccionado
+            setTimeout(() => {
+                //r = Math.floor(Math.random()*pistas.length);
+                var lenMatrix = $("#matrix").matrixStimulation("getLengthMatrix");
+                r = Math.floor(Math.random()*lenMatrix);
+                window.location.href = 'demo.html';
+            }, 2000);
+        });
         
     }
 
     function stop (){
-        ourboard.streamStop();
+        //ourboard.streamStop();
         $("#matrix").matrixStimulation("stop");
 
     }
@@ -76,24 +90,53 @@
     // Configuraciones de Cyton
     const Cyton = require('openbci-cyton');
     const ourboard = new Cyton({
+        //verbose: true,
         simulate: true, // Datos sinteticos
     });
 
+    ourboard.listPorts();
+    var portName = "/dev/ttyUSB0";
+
     // Se conecta al dispositivo o simulador
-    ourboard.connect("OpenBCISimulator")
+    ourboard.connect()
         .then(() => {
             //ourboard.streamStart();
             ourboard.on('sample', sample => {
-                //for (let i = 0; i < ourboard.numberOfChannels(); i++) {
+                for (let i = 0; i < ourboard.numberOfChannels(); i++) {
                     //removeData(myChart);
-                    addData(myChart, 'Volts', [sample.channelData[0].toFixed(8)]);
-                    //console.log("Channel " + (i + 1) + ": " + sample.channelData[i].toFixed(8) + " Volts.");
-                //}
+                    //addData(myChart, 'Volts', [sample.channelData[0].toFixed(8)]);
+                    console.log("Channel " + (i + 1) + ": " + sample.channelData[i].toFixed(8) + " Volts.");
+                }
             });
         })
 
     // Matriz de estimulacion
     $(document).ready(function () {
         $("#matrix").matrixStimulation();
+        setTimeout(()=>{
+            console.log('Iniciando...');
+            //start();
+        }, 1000)
     });
+
+    // Comunicacion con python
+    //start.js
+
+    var filePython = 'compute_input.py';
+    var spawn = require('child_process').spawn,
+        py    = spawn('python', [filePython]),
+        data = [1,2,3,4,5,6,7,8,9],
+        dataString = '';
+
+    // Son los datos a enviar al archivo python
+    py.stdout.on('data', function(data){
+        dataString += data.toString(); // Se convierte el arreglo en string
+    });
+
+    py.stdout.on('end', function(){
+        console.log('Sum of numbers=',dataString);
+    });
+
+    py.stdin.write(JSON.stringify(data));
+    py.stdin.end();
 </script>

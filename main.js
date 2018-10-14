@@ -7,8 +7,10 @@ const { app, BrowserWindow } = electron;
 let win;
 const createWindow = () => {
   win = new BrowserWindow({
+    backgroundColor: '#FFFFFF',
     width: 1400,
     height: 800,
+    fullscreen: true,
     toolbar: false,
     resizable: true
   });
