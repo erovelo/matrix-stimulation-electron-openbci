@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body style="background:black;">
+	<!--
+	<input type="submit" value="reproducir" onclick="startMultimedia();">
+	-->
+	<div>Se está detectando su selección...</div>
+	<iframe src="silence.mp3" allow="autoplay" id="audio" style="display:none"></iframe>
+	<audio id = "audio"></audio>
+	<div id="e2"></div>
+	<div id="e3"></div>
+	<div id="e4"></div>
+	<video id="video" width="560" height="350">
+	</video>
+
+	<audio id="myAudio">	</audio>
+
+</body>
+
+
+<script type="text/javascript">
+	// 0 Galleta, 1 Cereal, 2 Soda, 3 Comida, 4 Doctor, 5 Doctora, 6 Alumno
+	var pistas = ['0.mp3','1.mp3', '2.mp3', '3.mp3'];
+	var videos = ['0.mp4', '1.mp4', '2.mp4', '3.mp4'];
+	/*NOTA: no encontré los videos donde el robot sigue a la dra, a Erick y al otro dr, 
+	por lo que los elementos de audio y video del 4 al 6 corresponden a estos videos
+	Sólo hay que agregarlos a la carpeta y nombrarlos para que el programa los reconozca*/
+	/*var pistas = ['0.mp3','1.mp3', '2.mp3', '3.mp3', '4.mp3', '5.mp3', '6.mp3'];
+	var videos = ['0.mp4','1.mp4', '2.mp4', '3.mp4', '4.mp4', '5.mp4', '6.mp4'];*/
+	var audio = document.getElementById("myAudio");
+	var video = document.getElementById("video");
+	var et2 = document.getElementById("e2");
+	var et3 = document.getElementById("e3");
+	var biosig, r;
+
+	function playAudio(r) {
+		console.log('Entre');
+		audio.src = 'assets/audios/'+ r + ".mp3"; // Selecciona archivo a reproducir
+		audio.load();
+		audio.play(); //Le da play
+	}
+
+	function playVideo(r){
+		video.src = 'assets/videos/'+ r + ".mp4";
+		video.load();
+		video.play();
+	}
+
+	function startMultimedia(){
+		//r = '0' // Mi archivo se llama testaudio.mp3
+		playAudio(r);
+	}
+
+
+	r = Math.floor(Math.random()*pistas.length);
+	//r = '0.mp3' // Mi archivo se llama testaudio.mp3
+	
+
+	// Antes de reproducir el sonido, se agrega un listener que se invocará
+	// cuando termine de reproducirse
+	document.querySelector("#myAudio").addEventListener("ended", function () {
+		// Se llama al video a reproducir
+		console.log('Iniciando video en dos segundos');
+		setTimeout(()=>{
+			playVideo(r);
+		}, 2000);
+	}, false);
+
+
+	startMultimedia();
+
+	
+</script>
+</html>

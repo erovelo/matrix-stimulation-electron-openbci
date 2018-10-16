@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body style="background-color:black;">
+	<!--
+	<input type="submit" value="reproducir" onclick="startMultimedia();">	
+	-->
+	<div>Se está detectando su selección...</div>
+	<audio id = "audio"></audio>
+	<div id="e2"></div>
+	<div id="e3"></div>
+	<div id="e4"></div>
+	<video id="video" width="560" height="350">
+	</video>
+
+	<audio id="myAudio">	</audio>
+
+</body>
+
+
+<script type="text/javascript">
+	var pistas = ['0.mp3','1.mp3', '2.mp3'];
+	var videos = ['0.mp4', '1.mp4', '2.mp4'];
+	var audio = document.getElementById("myAudio");
+	var video = document.getElementById("video");
+	var et2 = document.getElementById("e2");
+	var et3 = document.getElementById("e3");
+	var biosig, r;
+
+	function playAudio(r) {
+		console.log('Entre');
+		audio.src = 'assets/audios/'+ r + ".mp3"; // Selecciona archivo a reproducir
+		audio.load();
+		audio.play(); //Le da play
+	}
+
+	function playVideo(r){
+		video.src = 'assets/videos/'+ r + ".mp4";
+		video.load();
+		video.play();
+	}
+
+	function startMultimedia(){
+		//r = '0' // Mi archivo se llama testaudio.mp3
+		playAudio(r);
+	}
+
+
+	//r = Math.floor(Math.random()*pistas.length);
+	r = 2;
+	//r = '0.mp3' // Mi archivo se llama testaudio.mp3
+	
+
+	// Antes de reproducir el sonido, se agrega un listener que se invocará
+	// cuando termine de reproducirse
+	document.querySelector("#myAudio").addEventListener("ended", function () {
+		// Se llama al video a reproducir
+		console.log('Iniciando video en dos segundos');
+		setTimeout(()=>{
+			playVideo('RobotPuerta');
+		}, 1000);
+		setTimeout(()=>{
+			playVideo('RobotPuerta2');
+		}, 3000);
+		setTimeout(()=>{
+			playVideo(r);
+		}, 7000);
+	}, false);
+	startMultimedia();
+</script>
+</html>
