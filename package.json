@@ -12,8 +12,7 @@
   "license": "ISC",
   "repository": {},
   "dependencies": {
-    "openbci-cyton": "^1.1.3",
-    "opencv4nodejs": "4.8.0"
+    "openbci-cyton": "^1.1.3"
   },
   "devDependencies": {
     "electron": "2.0.9",
