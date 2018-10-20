@@ -6,7 +6,7 @@
   "scripts": {
     "electron-rebuild": "electron-rebuild -w opencv4nodejs",
     "install": "npm run electron-rebuild",
-    "start": "electron main.js"
+    "start": "./node_modules/electron/cli.js main.js"
   },
   "author": "",
   "license": "ISC",
